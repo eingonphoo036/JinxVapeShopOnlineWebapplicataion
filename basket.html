@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+    <title>Basket</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/basket.css') }}">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-bar">
+            <a href="{{ url_for('homepage') }}" class="btn">Home</a>
+            <a href="{{ url_for('logout') }}" class="btn">Log Out</a>
+            <a href="{{ url_for('user_setting') }}" class="btn">User Setting</a>
+        </nav>
+        <h1 class="page-title">Your Basket</h1>
+    </header>
+    <main class="basket-container">
+        {% if basket_items %}
+            <table class="basket-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in basket_items %}
+                        <tr>
+                            <td>{{ item['name'] }}</td>
+                            <td>£{{ item['price'] }}</td>
+                            <td>{{ item['quantity'] }}</td>
+                            <td>£{{ item['price'] * item['quantity'] }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('remove_from_basket', basket_id=item['basket_id']) }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn remove-btn">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="checkout-section">
+                <h3>Payment Details</h3>
+                <form method="POST" action="{{ url_for('checkout') }}" class="checkout-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <h3>Payment Details</h3>
+    <label for="visa_card">Visa Card:</label>
+    <input type="text" id="visa_card" name="visa_card" placeholder="1234 5678 9012 3456" required>
+    <label for="expiry_date">Expiry Date:</label>
+    <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" required>
+    <label for="cvv">CVV:</label>
+    <input type="text" id="cvv" name="cvv" placeholder="123" required>
+    <button type="submit" class="btn checkout-btn">Checkout</button>
+</form>
+
+            </div>
+        {% else %}
+            <p class="empty-basket">Your basket is empty. <a href="{{ url_for('homepage') }}" class="link">Go shopping</a>.</p>
+        {% endif %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Jinx Vape Shop. All rights reserved.</p>
+    </footer>
+</body>
+</html>

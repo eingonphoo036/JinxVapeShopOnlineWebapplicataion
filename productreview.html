@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+    <title>Product Reviews</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="nav-bar">
+            <a href="{{ url_for('homepage') }}" class="btn">Home</a>
+            <a href="{{ url_for('logout') }}" class="btn">Log Out</a>
+        </nav>
+    </header>
+    <main>
+        <h1>Product Reviews</h1>
+        <div class="reviews">
+            {% for review in reviews %}
+                <div class="review">
+                    <!-- Safely displaying review data -->
+                    <h3>{{ review['product_name'] }}</h3>
+                    <p><strong>Rating:</strong> {{ review['rating'] }}</p>
+                    <p>{{ review['review_text'] }}</p>
+                    <small><em>Submitted on {{ review['created_at'] }}</em></small>
+                </div>
+            {% else %}
+                <!-- Display if there are no reviews -->
+                <p>No reviews available for this product.</p>
+            {% endfor %}
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Jinx Vape Shop. All rights reserved.</p>
+    </footer>
+</body>
+</html>

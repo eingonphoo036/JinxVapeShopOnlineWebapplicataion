@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+    <title>Log In - Jinx Vape Shop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="logo-shop-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Jinx Vape Shop Logo" class="logo">
+            <h1 class="shop-name">Jinx Vape Shop</h1>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="form-container">
+            <h2>Log In</h2>
+            <form method="POST" action="{{ url_for('login') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="Email" required>
+    
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" placeholder="Password" required>
+    
+    <button type="submit" class="btn login-btn">Log In</button>
+</form>
+
+            <div class="button-container">
+                <a href="{{ url_for('register') }}" class="btn create-account-btn">Create Account</a>
+                <a href="{{ url_for('homepage') }}" class="btn back-home-btn">Back Home</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Jinx Vape Shop. All rights reserved.</p>
+    </footer>
+</body>
+</html>

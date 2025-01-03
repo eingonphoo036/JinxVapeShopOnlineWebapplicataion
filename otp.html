@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/otp.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="logo-shop-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Jinx Vape Shop Logo" class="logo">
+            <h1 class="shop-name">Jinx Vape Shop</h1>
+        </div>
+    </header>
+    <main class="main-container">
+        <div class="form-container">
+            <h2>Authentication</h2>
+<form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="otp">OTP</label>
+    <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
+    <button type="submit" class="btn confirm-btn">Confirm</button>
+</form>
+
+            <div class="button-container">
+                <a href="{{ url_for('homepage') }}" class="btn back-btn">Back Home</a>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Jinx Vape Shop. All rights reserved.</p>
+    </footer>
+</body>
+</html>

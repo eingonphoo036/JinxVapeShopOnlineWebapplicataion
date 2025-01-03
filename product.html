@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+    <title>Product Details - {{ product.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/product.css') }}">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-bar">
+            <form class="search-container" method="POST" action="{{ url_for('search') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="text" placeholder="Search" name="query">
+                <button type="submit">Search</button>
+            </form>
+            <div class="auth-buttons">
+                {% if session.get('user_email') %}
+                    <a href="{{ url_for('basket') }}" class="btn">Basket</a>
+                    <a href="{{ url_for('logout') }}" class="btn">Log Out</a>
+                    <a href="{{ url_for('user_setting') }}" class="btn">User Setting</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn">Log In</a>
+                    <a href="{{ url_for('register') }}" class="btn">Create Account</a>
+                {% endif %}
+            </div>
+        </nav>
+        <div class="logo-section">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+            <h1>Jinx Vape Shop</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="product-detail-container">
+            <div class="product-image">
+                <img src="{{ url_for('static', filename='images/' + product.image_url) }}" alt="{{ product.name }}">
+            </div>
+            <div class="product-detail">
+                <h3>{{ product.name }}</h3>
+                <p class="price">Price: £{{ product.price }}</p>
+                <p class="description">{{ product.description }}</p>
+                
+                <!-- Reviews Section -->
+                <div class="reviews">
+                    <h4>Reviews:</h4>
+                    {% if product_reviews %}
+                        <ul>
+                            {% for review in product_reviews %}
+                                <li>
+                                    <strong>{{ review['email'] }}</strong>: 
+                                    {{ review['review_text'] }} ({{ review['rating'] }}/5)
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No reviews available for this product.</p>
+                    {% endif %}
+                </div>
+
+                {% if session.get('user_email') %}
+                    <div class="add-item-container">
+                        <form method="POST" action="{{ url_for('add_to_basket', product_id=product.id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1">
+                            <button type="submit" class="btn add-btn">Add to Cart</button>
+                        </form>
+                    </div>
+                {% endif %}
+                <a href="{{ url_for('homepage') }}" class="btn back-btn">Back Home</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Jinx Vape Shop. All rights reserved.</p>
+    </footer>
+</body>
+</html>

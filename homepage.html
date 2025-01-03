@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+    <title>Jinx Vape Shop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-bar">
+            <form class="search-container" method="POST" action="{{ url_for('homepage') }}">
+                <!-- CSRF Token -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="text" placeholder="Search" name="query" required>
+                <button type="submit">Search</button>
+            </form>
+            <div class="auth-buttons">
+                {% if logged_in %}
+                    <a href="{{ url_for('basket') }}" class="btn">Basket</a>
+                    <a href="{{ url_for('logout') }}" class="btn">Log Out</a>
+                    <a href="{{ url_for('user_setting') }}" class="btn">User Setting</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn">Log In</a>
+                    <a href="{{ url_for('register') }}" class="btn">Create Account</a>
+                {% endif %}
+            </div>
+        </nav>
+        <div class="logo-title">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+            <h1>Jinx Vape Shop</h1>
+        </div>
+    </header>
+
+    <main class="products-container">
+        <!-- Display a message if no products are found -->
+        {% if search_results_message %}
+        <div class="search-message">
+            <p>{{ search_results_message }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Loop through products dynamically -->
+        {% for product in products %}
+        <div class="product">
+            <a href="{{ url_for('product_page', product_id=product['id']) }}">
+                <img src="{{ url_for('static', filename='images/' + product['image_url']) }}" alt="{{ product['name'] }}">
+                <h3>{{ product['name'] }}</h3>
+                <p>Price: £{{ product['price'] }}</p>
+            </a>
+            <!-- Display reviews dynamically -->
+            <div class="reviews">
+                <h4>Reviews:</h4>
+                {% if product_reviews[product['id']] %}
+                    <ul>
+                        {% for review in product_reviews[product['id']] %}
+                            <li>
+                                <strong>{{ review['email'] }}</strong>: 
+                                {{ review['review_text'] }} ({{ review['rating'] }}/5)
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No reviews yet for this product.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Jinx Vape Shop. All rights reserved.</p>
+    </footer>
+</body>
+</html>
